@@ -1,1 +1,29 @@
+dim senha As Integer
+dim tentativa As Integer
+
+senha = 2234
+
+
+Print "--- Digite a senha ---"
+Input tentativa
+
+while tentativa <> senha 
+Print "PIN invalido. Tente novamente."
+
+Input tentativa
+
+Wend
+
+if tentativa = senha then
+Print "Transacao autorizada."
+end if
+
+sleep
+
+
+
+
+
+
+
 
