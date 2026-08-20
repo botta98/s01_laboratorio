@@ -1,0 +1,27 @@
+dim km As Integer
+dim min As Integer
+dim Pace As Integer
+
+Print " Qual a distancia do percuso? "
+Input km 
+
+Print " Qual foi o tempo necessario para terminar o percurso? "
+Input min 
+
+Pace = min/km
+
+Print " O seu pace foi: "; Pace ; "km/min"
+
+sleep
+
+
+
+
+
+
+
+
+
+
+
+
