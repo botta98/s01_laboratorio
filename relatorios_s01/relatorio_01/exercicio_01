@@ -1,1 +1,26 @@
+dim peso As Integer
+dim meta As Integer
+dim agua As Integer
+dim ml As Single
+'Perguntei para IA como declarar uma variável float no basic
+
+Print " --- Digite seu peso!: --- "
+Input peso 
+Print " Quantos ml de agua voce tomou hoje? "
+Input agua
+
+meta = peso * (35/1000)
+
+ml = agua/1000
+
+if ml >= meta then
+    Print "Meta atingida!"
+else 
+    Print "Meta nao atingida"
+end if 
+
+sleep
+
+
+
 
