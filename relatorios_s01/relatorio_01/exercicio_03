@@ -1,0 +1,26 @@
+dim hora As Integer
+dim minutos As Integer
+dim segundos As Integer
+
+Print " --- Digite o valor em horas ---"
+Input hora
+
+minutos = hora * 60
+
+segundos = minutos * 60
+
+Print "O valor original em horas: "; hora
+
+Print "O valor equivalente em minutos: "; minutos
+
+Print "O valor equivalente em segundos: "; segundos 
+
+Sleep
+
+
+
+
+
+
+
+
