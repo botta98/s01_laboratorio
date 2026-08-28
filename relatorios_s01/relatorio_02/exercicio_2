@@ -9,8 +9,9 @@ function contarOcorrencias(tabela, alvo)
 end
 
 --[[
-precisei de ajuda com esse return, não sabia como funcionava, pedi para a IA 
-me ajuda a colocar dentro do código
+precisei de ajuda com esse return, meu código não estava funcionando
+só tinha colocado end, pedi para a IA me ajuda a arrumar essa parte do
+código
 ]]
 
 print("Digite a quantidade de elementos (N): ")
