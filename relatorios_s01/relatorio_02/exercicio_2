@@ -9,8 +9,8 @@ function contarOcorrencias(tabela, alvo)
 end
 
 --[[
-precisei de ajuda com esse return, meu código não estava funcionando
-só tinha colocado end, pedi para a IA me ajuda a arrumar essa parte do
+precisei de ajuda com esse bloco, meu código não estava funcionando
+só tinha colocado 2 end, pedi para a IA me mostrar o erro dessa parte do
 código
 ]]
 
