@@ -1,7 +1,7 @@
 function gerarTabelaPotencias(inicio, fim, base)
--- [[ 
-usei IA para entender como funciona para implementar uma function
-]]
+
+-- usei IA para entender como funciona para implementar uma function
+
     for expoente = inicio, fim do
         print(base .. " ^ " .. expoente .. " = " .. base ^ expoente)
     end
