@@ -1,0 +1,46 @@
+package main
+
+import "fmt"
+
+func validarIngresso(setor string, codigo int) bool {
+	if setor == "VIP" && codigo == 2026 {
+		return true
+	}
+	return false
+}
+
+func main() {
+	var setor string
+	var codigo int
+
+	// For infinito
+	for {
+		fmt.Print("Digite o setor do ingresso: ")
+
+		_, errSetor := fmt.Scanln(&setor)
+
+		// Se a leitura falhou, a entrada acabou. Encerra em vez de repetir sem fim.
+		if errSetor != nil {
+			fmt.Println()
+			fmt.Println("Entrada encerrada.")
+			break
+		}
+
+		fmt.Print("Digite o codigo do ingresso: ")
+
+		_, errCodigo := fmt.Scanln(&codigo)
+
+		if errCodigo != nil {
+			fmt.Println()
+			fmt.Println("Entrada encerrada.")
+			break
+		}
+
+		if validarIngresso(setor, codigo) {
+			fmt.Println("Acesso liberado a area VIP!")
+			break
+		} else {
+			fmt.Println("Ingresso ou setor invalido. Tente novamente.")
+		}
+	}
+}
