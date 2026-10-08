@@ -1,0 +1,143 @@
+using System;
+using System.Collections.Generic;
+
+// Exercício 3: Composição e Agregação (O Grimório de Frieren)
+//
+// COMPOSIÇÃO (relação forte):
+//   - Maga -> Grimorio: o Grimorio é criado DENTRO do construtor da Maga.
+//   - Grimorio -> Feitico: cada Feitico é criado DENTRO do grimório, no método Registrar().
+//   As partes não existem sem o todo: o grimório nasce e "morre" junto com a Frieren,
+//   e os feitiços só existem dentro do grimório.
+//
+// AGREGAÇÃO (relação fraca):
+//   - Maga -> Companheiro: Fern e Stark são criados ANTES e FORA da Frieren, na Main.
+//   A Maga só guarda uma referência a eles na lista; eles existem por conta própria,
+//   tanto que dá pra chamar stark.Apresentar() direto na Main.
+
+public class Feitico
+{
+    public string Nome { get; set; }
+
+    public Feitico(string nome)
+    {
+        this.Nome = nome;
+    }
+
+    public void Conjurar()
+    {
+        Console.WriteLine($"Conjurando: {Nome}!");
+    }
+}
+
+public class Grimorio
+{
+    // lista privada de feitiços, criada no construtor
+    private List<Feitico> _feiticos;
+
+    public Grimorio()
+    {
+        this._feiticos = new List<Feitico>();
+    }
+
+    // COMPOSIÇÃO: o Feitico é criado aqui DENTRO do grimório
+    public void Registrar(string nomeFeitico)
+    {
+        this._feiticos.Add(new Feitico(nomeFeitico));
+        Console.WriteLine($"[Grimório] Novo feitiço registrado: {nomeFeitico}");
+    }
+
+    public void ListarFeiticos()
+    {
+        Console.WriteLine($"\nO grimório tem {_feiticos.Count} feitiços:");
+        foreach (var feitico in _feiticos)
+        {
+            feitico.Conjurar();
+        }
+    }
+}
+
+public class Companheiro
+{
+    public string Nome { get; set; }
+    public string Funcao { get; set; }
+
+    public Companheiro(string nome, string funcao)
+    {
+        this.Nome = nome;
+        this.Funcao = funcao;
+        Console.WriteLine($"[Companheiro] {Nome} ({Funcao}) já existe por conta própria.");
+    }
+
+    public void Apresentar()
+    {
+        Console.WriteLine($"Eu sou {Nome}, {Funcao}.");
+    }
+}
+
+public class Maga
+{
+    public string Nome { get; set; }
+
+    // só a própria Maga pode trocar o grimório
+    public Grimorio Grimorio { get; private set; }
+
+    // lista privada de companheiros (guarda só as referências)
+    private List<Companheiro> _companheiros;
+
+    public Maga(string nome)
+    {
+        this.Nome = nome;
+        // COMPOSIÇÃO: o grimório nasce junto com a Maga
+        this.Grimorio = new Grimorio();
+        this._companheiros = new List<Companheiro>();
+        Console.WriteLine($"\n[Maga] {Nome} iniciou a jornada carregando o seu grimório.");
+    }
+
+    // AGREGAÇÃO: o companheiro foi criado fora e só é adicionado ao grupo
+    public void RecrutarCompanheiro(Companheiro c)
+    {
+        this._companheiros.Add(c);
+        Console.WriteLine($"{c.Nome} entrou para o grupo de {Nome}.");
+    }
+
+    public void MostrarGrupo()
+    {
+        Console.WriteLine($"\nGrupo de {Nome} ({_companheiros.Count} companheiros):");
+        foreach (var companheiro in _companheiros)
+        {
+            companheiro.Apresentar();
+        }
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("=== A Jornada de Frieren ===");
+
+        // AGREGAÇÃO: os companheiros são criados ANTES da Frieren
+        Companheiro fern = new Companheiro("Fern", "Maga Aprendiz");
+        Companheiro stark = new Companheiro("Stark", "Guerreiro");
+
+        // COMPOSIÇÃO: o grimório é criado dentro do construtor da Maga
+        Maga frieren = new Maga("Frieren");
+
+        frieren.RecrutarCompanheiro(fern);
+        frieren.RecrutarCompanheiro(stark);
+
+        // os feitiços são registrados pelo grimório da Frieren
+        frieren.Grimorio.Registrar("Zoltraak");
+        frieren.Grimorio.Registrar("Campo de Flores");
+        frieren.Grimorio.Registrar("Limpar Estátuas de Bronze");
+
+        frieren.MostrarGrupo();
+        frieren.Grimorio.ListarFeiticos();
+
+        // Stark existe independente da Frieren: dá pra usar o objeto direto
+        Console.WriteLine("\n--- Stark se apresenta sozinho ---");
+        stark.Apresentar();
+
+        Console.WriteLine("\n=== Fim da Jornada ===");
+    }
+}
