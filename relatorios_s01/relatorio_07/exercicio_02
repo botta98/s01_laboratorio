@@ -1,0 +1,85 @@
+using System;
+using System.Collections.Generic;
+
+// Exercício 2: Herança e Polimorfismo (Batalha de Exibição Pokémon)
+
+// CLASSE BASE: todo Pokémon tem espécie e nível
+public class Pokemon
+{
+    public string Especie { get; set; }
+    public int Nivel { get; private set; }
+
+    public Pokemon(string especie, int nivel)
+    {
+        this.Especie = especie;
+        this.Nivel = nivel;
+    }
+
+    // VIRTUAL: as classes filhas podem reescrever esse método
+    public virtual void EntrarEmCampo()
+    {
+        Console.WriteLine($"\n--- {Especie} (Nv. {Nivel}) entrou em campo! ---");
+        Console.WriteLine($"{Especie} usou Investida!");
+    }
+}
+
+// HERANÇA: TipoPlanta É UM Pokemon
+public class TipoPlanta : Pokemon
+{
+    public string GolpeEspecial { get; set; }
+
+    // repassa espécie e nível pro construtor do pai com : base(...)
+    public TipoPlanta(string especie, int nivel, string golpeEspecial) : base(especie, nivel)
+    {
+        this.GolpeEspecial = golpeEspecial;
+    }
+
+    // OVERRIDE sem chamar o pai: comportamento totalmente próprio
+    public override void EntrarEmCampo()
+    {
+        Console.WriteLine($"\n--- {Especie} (Nv. {Nivel}) entrou em campo! ---");
+        Console.WriteLine($"{Especie} usou {GolpeEspecial}! Um golpe especial do Tipo Planta!");
+    }
+}
+
+// HERANÇA: TipoEletrico É UM Pokemon
+public class TipoEletrico : Pokemon
+{
+    public int Voltagem { get; private set; }
+
+    public TipoEletrico(string especie, int nivel, int voltagem) : base(especie, nivel)
+    {
+        this.Voltagem = voltagem;
+    }
+
+    // OVERRIDE chamando o pai: primeiro o ataque genérico, depois a descarga
+    public override void EntrarEmCampo()
+    {
+        base.EntrarEmCampo();
+        Console.WriteLine($"{Especie} soltou uma descarga elétrica de {Voltagem} volts!");
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("=== Batalha de Exibição Pokémon ===");
+
+        // a lista é do tipo da classe pai, então aceita qualquer classe filha
+        List<Pokemon> emCampo = new List<Pokemon>();
+        emCampo.Add(new TipoPlanta("Sceptile", 36, "Leaf Blade"));
+        emCampo.Add(new TipoEletrico("Jolteon", 30, 10000));
+        emCampo.Add(new Pokemon("Eevee", 15));
+
+        Console.WriteLine($"Pokémon em campo: {emCampo.Count}");
+
+        // POLIMORFISMO: cada Pokémon executa a SUA versão de EntrarEmCampo()
+        foreach (var pokemon in emCampo)
+        {
+            pokemon.EntrarEmCampo();
+        }
+
+        Console.WriteLine("\n=== Fim da Batalha ===");
+    }
+}
