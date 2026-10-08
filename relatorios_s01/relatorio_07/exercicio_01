@@ -1,0 +1,75 @@
+using System;
+using System.Collections.Generic;
+
+// Exercício 1: Encapsulamento e Construtores (Defesa de Minas Tirith)
+
+public class CombatenteDeGondor
+{
+    // ENCAPSULAMENTO: qualquer parte do programa pode ler,
+    // mas só a própria classe pode alterar (private set)
+    public string Nome { get; private set; }
+    public string Povo { get; private set; }
+    public string Posto { get; private set; }
+    public int Circulo { get; private set; }
+
+    // começa "Desarmado" e só muda pelo método Equipar()
+    public string Armamento { get; private set; } = "Desarmado";
+
+    // CONSTRUTOR: preenche os dados e imprime a convocação
+    public CombatenteDeGondor(string nome, string povo, string posto, int circulo)
+    {
+        this.Nome = nome;
+        this.Povo = povo;
+        this.Posto = posto;
+        this.Circulo = circulo;
+        Console.WriteLine($"[Convocação] {Nome} ({Povo}) foi convocado para defender o Círculo {Circulo} de Minas Tirith.");
+    }
+
+    // único jeito de alterar o Armamento de fora da classe
+    public void Equipar(string arma)
+    {
+        this.Armamento = arma;
+    }
+
+    public void ApresentarUnidade()
+    {
+        Console.WriteLine($"\n--- {Nome} ---");
+        Console.WriteLine($"Povo: {Povo}");
+        Console.WriteLine($"Posto: {Posto}");
+        Console.WriteLine($"Círculo: {Circulo}");
+
+        // o armamento só aparece se o combatente estiver armado
+        if (Armamento != "Desarmado")
+        {
+            Console.WriteLine($"Armamento: {Armamento}");
+        }
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("=== Cerco a Minas Tirith ===");
+
+        CombatenteDeGondor legolas = new CombatenteDeGondor("Legolas", "Elfo", "Arqueiro", 1);
+        legolas.Equipar("Arco dos Galadhrim");
+
+        CombatenteDeGondor pippin = new CombatenteDeGondor("Peregrin Took", "Hobbit", "Guarda da Cidadela", 7);
+
+        CombatenteDeGondor gimli = new CombatenteDeGondor("Gimli", "Anão", "Guerreiro", 2);
+        gimli.Equipar("Machado de Batalha");
+
+        legolas.ApresentarUnidade();
+        pippin.ApresentarUnidade();
+        gimli.ApresentarUnidade();
+
+        // Tentativa de alterar o Posto direto na Main (linha comentada porque não compila):
+        // pippin.Posto = "Capitão de Gondor";
+        // error CS0272: The property or indexer 'CombatenteDeGondor.Posto' cannot be used
+        // in this context because the set accessor is inaccessible
+        // -> o set do Posto é private, então só a própria classe CombatenteDeGondor pode alterá-lo.
+
+        Console.WriteLine("\n=== Fim da Convocação ===");
+    }
+}
