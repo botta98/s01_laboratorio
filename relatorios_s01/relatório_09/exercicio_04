@@ -1,0 +1,88 @@
+# contrato: quem incluir deve implementar depor
+module Depoente
+  def depor
+    raise NotImplementedError, "#{self.class} deve implementar depor"
+  end
+end
+
+# mixin: já vem pronto
+module Detivel
+  def ser_detido
+    # nome vem do attr_reader da classe
+    puts "#{nome} foi levado pela Scotland Yard."
+  end
+end
+
+
+# classe base, sem módulos
+class Envolvido
+  attr_reader :nome
+
+  def initialize(nome)
+    @nome = nome
+  end
+end
+
+
+class TestemunhaOcular < Envolvido
+  include Depoente
+
+  def depor
+    puts "#{nome} (testemunha): viu um homem cambaleando perto do portão da casa."
+  end
+end
+
+
+class SuspeitoDoCrime < Envolvido
+  include Depoente
+  include Detivel
+
+  def depor
+    puts "#{nome} (suspeito): diz que estava longe da casa na hora do crime."
+  end
+end
+
+
+# agregação: recebe envolvidos que já existem
+class Investigacao
+  def initialize(caso)
+    @caso = caso
+    @envolvidos = []
+  end
+
+  def registrar(envolvido)
+    @envolvidos << envolvido
+  end
+
+  def ouvir_todos
+    puts "\n--- Caso: #{@caso} ---"
+    # cada um depõe do seu jeito
+    @envolvidos.each do |envolvido|
+      envolvido.depor
+    end
+  end
+
+  def acionar_scotland_yard
+    puts "\n--- Holmes aciona a Scotland Yard ---"
+    # só quem tem ser_detido
+    detidos = @envolvidos.select { |envolvido| envolvido.respond_to?(:ser_detido) }
+    detidos.each(&:ser_detido)
+  end
+end
+
+
+# --- MAIN ---
+puts "--- Depoimentos em Baker Street ---"
+
+# envolvidos criados antes da investigação
+rance = TestemunhaOcular.new("John Rance")
+charpentier = SuspeitoDoCrime.new("Arthur Charpentier")
+hope = SuspeitoDoCrime.new("Jefferson Hope")
+
+caso = Investigacao.new("Um Estudo em Vermelho")
+caso.registrar(rance)
+caso.registrar(charpentier)
+caso.registrar(hope)
+
+caso.ouvir_todos
+caso.acionar_scotland_yard
