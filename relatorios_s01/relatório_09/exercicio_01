@@ -43,7 +43,7 @@ class DrinkDeLenda < CoquetelAfterlife
 end
 
 
-# 
+# --- MAIN ---
 puts "--- Cardápio do Afterlife ---"
 
 sunrise = CoquetelAfterlife.new("Tequila Sunrise", 12)
@@ -55,7 +55,7 @@ cardapio.each do |drink|
   puts drink.ficha
 end
 
-puts 
+puts "\n--- Reajuste de preço ---"
 silverhand.preco = 500    # inválido, mantém o valor
 silverhand.preco = 80     # válido
 puts silverhand.ficha
