@@ -1,0 +1,55 @@
+# Composição: o PhoneWave é criado dentro do laboratório e só existe nele.
+# Agregação: os membros são criados fora e o laboratório só guarda eles no array.
+
+
+class PhoneWave
+  def enviar_dmail(mensagem)
+    puts "D-Mail: #{mensagem}"
+    puts "A mensagem foi enviada para o passado!"
+  end
+end
+
+
+class MembroDoLab
+  attr_reader :numero, :nome
+
+  def initialize(numero, nome)
+    @numero = numero
+    @nome = nome
+  end
+end
+
+
+class LaboratorioDeGadgets
+  def initialize
+    @phonewave = PhoneWave.new    # composição
+    @membros = []                 # agregação
+  end
+
+  def admitir(membro)
+    @membros << membro
+    puts "Lab Mem nº #{membro.numero}: #{membro.nome} entrou no laboratório."
+  end
+
+  def experimento(mensagem)
+    puts "\n--- Experimento no Laboratório ---"
+    @membros.each do |membro|
+      puts "Presente: Lab Mem nº #{membro.numero}, #{membro.nome}"
+    end
+    @phonewave.enviar_dmail(mensagem)
+  end
+end
+
+
+# --- MAIN ---
+puts "--- Laboratório de Gadgets do Futuro ---"
+
+# membros criados antes do laboratório
+okabe = MembroDoLab.new(1, "Rintaro Okabe")
+kurisu = MembroDoLab.new(4, "Kurisu Makise")
+
+lab = LaboratorioDeGadgets.new
+lab.admitir(okabe)
+lab.admitir(kurisu)
+
+lab.experimento("El Psy Kongroo")
