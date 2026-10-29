@@ -1,0 +1,75 @@
+// Exercício 1: Encapsulamento e Herança (Duelo no Ginásio)
+
+
+class Pokemon {
+    #vida;    // privado
+
+    constructor(apelido, tipo, vidaInicial) {
+        this.apelido = apelido;    // público
+        this.tipo = tipo;          // público
+        this.#vida = vidaInicial;
+    }
+
+    // getter sem setter: de fora, só leitura
+    get vida() {
+        return this.#vida;
+    }
+
+    // a vida nunca fica abaixo de 0
+    sofrerDano(pontos) {
+        this.#vida -= pontos;
+        if (this.#vida < 0) {
+            this.#vida = 0;
+        }
+        console.log(`${this.apelido} recebeu ${pontos} de dano e ficou com ${this.#vida} de vida.`);
+    }
+
+    atacar(alvo) {
+        console.log(`${this.apelido} usa Investida em ${alvo.apelido}!`);
+        alvo.sofrerDano(10);
+    }
+}
+
+
+// Squirtle herda de Pokemon
+class Squirtle extends Pokemon {
+    constructor(apelido, vidaInicial) {
+        super(apelido, 'Água', vidaInicial);    // tipo fixo
+    }
+
+    atacar(alvo) {
+        console.log(`${this.apelido} usa Jato d'Água em ${alvo.apelido}!`);
+        alvo.sofrerDano(20);
+    }
+}
+
+
+class Bulbasaur extends Pokemon {
+    constructor(apelido, vidaInicial) {
+        super(apelido, 'Planta', vidaInicial);    // tipo fixo
+    }
+
+    atacar(alvo) {
+        console.log(`${this.apelido} usa Chicote de Vinha em ${alvo.apelido}!`);
+        alvo.sofrerDano(15);
+    }
+}
+
+
+// --- MAIN ---
+console.log('--- Duelo no Ginásio ---');
+
+const casquinha = new Squirtle('Casquinha', 50);
+const bulbinho = new Bulbasaur('Bulbinho', 30);
+
+bulbinho.atacar(casquinha);
+casquinha.atacar(bulbinho);
+casquinha.atacar(bulbinho);
+
+console.log('\n--- Fim do duelo ---');
+console.log(`${casquinha.apelido} (${casquinha.tipo}): ${casquinha.vida} de vida`);
+console.log(`${bulbinho.apelido} (${bulbinho.tipo}): ${bulbinho.vida} de vida`);
+
+// dá erro porque #vida é privado (o programa nem roda):
+// console.log(casquinha.#vida);
+// SyntaxError: Private field '#vida' must be declared in an enclosing class
