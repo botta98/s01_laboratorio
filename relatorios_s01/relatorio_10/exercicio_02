@@ -1,0 +1,90 @@
+// Exercício 2: Interface, Composição e Agregação (Esquadrão do Protocolo)
+
+
+// parte composta
+class Pistola {
+    constructor(modelo) {
+        this.modelo = modelo;
+    }
+}
+
+
+// contrato: as filhas devem sobrescrever usarHabilidade()
+class AgenteProtocolo {
+    #pistola;    // privado
+
+    constructor(codinome, modeloDaPistola) {
+        this.codinome = codinome;
+        this.#pistola = new Pistola(modeloDaPistola);    // composição
+    }
+
+    usarHabilidade() {
+        throw new Error(`O agente ${this.codinome} deve implementar o método 'usarHabilidade()'`);
+    }
+
+    entrarEmCombate() {
+        console.log(`${this.codinome}, com a pistola ${this.#pistola.modelo}, ${this.usarHabilidade()}`);
+    }
+}
+
+
+// sem constructor próprio, usam o do pai
+class Controlador extends AgenteProtocolo {
+    usarHabilidade() {
+        return 'lança uma cortina de fumaça e bloqueia a visão dos inimigos!';
+    }
+}
+
+class Iniciador extends AgenteProtocolo {
+    usarHabilidade() {
+        return 'revela a posição dos inimigos e abre caminho para o time!';
+    }
+}
+
+class Duelista extends AgenteProtocolo {
+    usarHabilidade() {
+        return 'entra primeiro no combate e parte para cima dos inimigos!';
+    }
+}
+
+
+// agregação: recebe agentes que já existem
+class Esquadrao {
+    #agentes;    // privado
+
+    constructor(nome, agentes) {
+        this.nome = nome;
+        this.#agentes = agentes;
+    }
+
+    iniciarPartida() {
+        console.log(`\n--- Esquadrão ${this.nome} inicia a partida ---`);
+        // cada agente usa a sua habilidade
+        this.#agentes.forEach(agente => agente.entrarEmCombate());
+    }
+
+    listarControladores() {
+        return this.#agentes.filter(agente => agente instanceof Controlador);
+    }
+}
+
+
+// --- MAIN ---
+console.log('--- Protocolo VALORANT ---');
+
+const brimstone = new Controlador('Brimstone', 'Classic');
+const omen = new Controlador('Omen', 'Ghost');
+const sova = new Iniciador('Sova', 'Sheriff');
+const jett = new Duelista('Jett', 'Frenzy');
+
+const alfa = new Esquadrao('Alfa', [brimstone, omen, sova, jett]);
+alfa.iniciarPartida();
+
+console.log('\nControladores do esquadrão:');
+alfa.listarControladores().forEach(agente => console.log(`- ${agente.codinome}`));
+
+// o objeto é criado, mas a chamada dá erro:
+const recruta = new AgenteProtocolo('Recruta', 'Classic');
+// recruta.entrarEmCombate();
+// Error: O agente Recruta deve implementar o método 'usarHabilidade()'
+console.log(`\n${recruta.codinome} foi criado, mas não tem habilidade.`);
