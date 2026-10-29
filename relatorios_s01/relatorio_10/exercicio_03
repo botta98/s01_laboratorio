@@ -1,0 +1,81 @@
+// Exercício 3: Composição e Agregação (Os Segredos da Cabana)
+//
+// Composição: as fichas são criadas dentro do diário (no anotar) e só existem nele.
+// Agregação: os funcionários são criados fora e a Cabana só guarda eles no array.
+
+
+class FichaDeCriatura {
+    constructor(criatura, nivelDePerigo) {
+        this.criatura = criatura;
+        this.nivelDePerigo = nivelDePerigo;
+    }
+
+    descrever() {
+        return `${this.criatura} | Nível de perigo: ${this.nivelDePerigo}`;
+    }
+}
+
+
+class DiarioMisterioso {
+    #fichas = [];    // privado
+
+    constructor(numero) {
+        this.numero = numero;
+    }
+
+    // composição: a ficha nasce aqui dentro
+    anotar(criatura, nivelDePerigo) {
+        this.#fichas.push(new FichaDeCriatura(criatura, nivelDePerigo));
+    }
+
+    exibirFichas() {
+        console.log(`\n--- Diário nº ${this.numero} ---`);
+        this.#fichas.forEach(ficha => console.log(ficha.descrever()));
+    }
+}
+
+
+class Funcionario {
+    constructor(nome, cargo) {
+        this.nome = nome;
+        this.cargo = cargo;
+    }
+}
+
+
+class CabanaDoMisterio {
+    #funcionarios = [];    // privado
+
+    constructor(dono) {
+        this.dono = dono;
+    }
+
+    // agregação: recebe um funcionário que já existe
+    contratar(funcionario) {
+        this.#funcionarios.push(funcionario);
+    }
+
+    abrirAsPortas() {
+        console.log(`\n--- ${this.dono} abre a Cabana do Mistério ---`);
+        this.#funcionarios.forEach(f => console.log(`${f.nome} (${f.cargo})`));
+    }
+}
+
+
+// --- MAIN ---
+console.log('--- Gravity Falls ---');
+
+const diario = new DiarioMisterioso(3);
+diario.anotar('Gnomos', 2);
+diario.anotar('Multi-Urso', 4);
+diario.anotar('Bill Cipher', 5);
+diario.exibirFichas();
+
+// funcionários criados antes da Cabana
+const soos = new Funcionario('Soos', 'Faz-tudo');
+const wendy = new Funcionario('Wendy', 'Caixa');
+
+const cabana = new CabanaDoMisterio('Tio Stan');
+cabana.contratar(soos);
+cabana.contratar(wendy);
+cabana.abrirAsPortas();
