@@ -1,0 +1,102 @@
+// Exercício 4: Revisão Geral (O Banquete da Masmorra)
+//
+// Composição: a Panela é criada dentro do construtor do Cozinheiro e só existe junto com ele.
+// Agregação: os monstros são criados fora, antes do Cozinheiro, e ele só guarda eles na lista.
+
+import java.util.ArrayList;
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("--- O Banquete da Masmorra ---");
+
+        // monstros criados antes do cozinheiro
+        Slime slime = new Slime("Slime gigante");
+        Mandragora mandragora = new Mandragora("Mandrágora");
+
+        Cozinheiro senshi = new Cozinheiro("Senshi", "adamantite");
+        senshi.adicionarIngrediente(slime);
+        senshi.adicionarIngrediente(mandragora);
+
+        senshi.servirBanquete();
+    }
+}
+
+
+// classe abstrata: cada monstro tem a sua receita
+abstract class Monstro {
+    private String nome;
+
+    public Monstro(String nome) {
+        this.nome = nome;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public abstract String receita();
+}
+
+
+class Slime extends Monstro {
+    public Slime(String nome) {
+        super(nome);
+    }
+
+    @Override
+    public String receita() {
+        return "seco ao sol e servido como gelatina";
+    }
+}
+
+
+class Mandragora extends Monstro {
+    public Mandragora(String nome) {
+        super(nome);
+    }
+
+    @Override
+    public String receita() {
+        return "picada e frita em uma omelete";
+    }
+}
+
+
+// parte composta
+class Panela {
+    private String material;
+
+    public Panela(String material) {
+        this.material = material;
+    }
+
+    public String getMaterial() {
+        return material;
+    }
+}
+
+
+class Cozinheiro {
+    private String nome;
+    private Panela panela;
+    private ArrayList<Monstro> ingredientes;
+
+    public Cozinheiro(String nome, String materialDaPanela) {
+        this.nome = nome;
+        this.panela = new Panela(materialDaPanela);    // composição
+        this.ingredientes = new ArrayList<>();
+    }
+
+    // agregação: recebe um monstro que já existe
+    public void adicionarIngrediente(Monstro monstro) {
+        ingredientes.add(monstro);
+    }
+
+    public void servirBanquete() {
+        System.out.println(nome + " serve o banquete na panela de " + panela.getMaterial() + ":");
+        // cada monstro tem a sua receita
+        for (Monstro monstro : ingredientes) {
+            System.out.println("- " + monstro.getNome() + ": " + monstro.receita());
+        }
+    }
+}
