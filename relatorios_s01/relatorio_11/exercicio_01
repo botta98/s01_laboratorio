@@ -1,0 +1,63 @@
+// Exercício 1: Classe Abstrata e Herança (Os Moradores do Castelo)
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("--- Os Moradores do Castelo ---");
+
+        // as duas variáveis são do tipo Morador
+        Morador howl = new Mago("Howl", "virar um pássaro gigante");
+        Morador calcifer = new DemonioDoFogo("Calcifer");
+
+        howl.apresentar();
+        calcifer.apresentar();
+
+        // dá erro porque Morador é abstrata (o programa nem compila):
+        // Morador sophie = new Morador("Sophie");
+        // error: Morador is abstract; cannot be instantiated
+    }
+}
+
+
+// classe abstrata: não pode ser instanciada
+abstract class Morador {
+    private String nome;
+
+    public Morador(String nome) {
+        this.nome = nome;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    // as filhas são obrigadas a implementar
+    public abstract void apresentar();
+}
+
+
+// Mago herda de Morador
+class Mago extends Morador {
+    private String feitico;
+
+    public Mago(String nome, String feitico) {
+        super(nome);
+        this.feitico = feitico;
+    }
+
+    @Override
+    public void apresentar() {
+        System.out.println("Sou o mago " + getNome() + " e meu feitiço é " + feitico + ".");
+    }
+}
+
+
+class DemonioDoFogo extends Morador {
+    public DemonioDoFogo(String nome) {
+        super(nome);
+    }
+
+    @Override
+    public void apresentar() {
+        System.out.println("Sou " + getNome() + ", o demônio do fogo, e faço o castelo andar!");
+    }
+}
