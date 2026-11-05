@@ -1,0 +1,80 @@
+// Exercício 3: Interface e HashMap (Avistamentos na Cidade)
+
+import java.util.HashMap;
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("--- Mapa de Avistamentos ---");
+
+        Alienigena serpoiano = new Alienigena("Serpoiano");
+        EspiritoYoukai vovoTurbo = new EspiritoYoukai("Vovó Turbo");
+
+        MapaDeAvistamentos mapa = new MapaDeAvistamentos();
+        mapa.registrar("Hospital abandonado", serpoiano);
+        mapa.registrar("Túnel", vovoTurbo);
+
+        mapa.investigar("Hospital abandonado");
+        mapa.investigar("Túnel");
+        mapa.investigar("Escola");    // local sem registro
+    }
+}
+
+
+// interface: todo ser sobrenatural sabe se manifestar
+interface Sobrenatural {
+    void manifestar();
+}
+
+
+class Alienigena implements Sobrenatural {
+    private String nome;
+
+    public Alienigena(String nome) {
+        this.nome = nome;
+    }
+
+    @Override
+    public void manifestar() {
+        System.out.println(nome + " desce de um disco voador e tenta abduzir quem está investigando!");
+    }
+}
+
+
+class EspiritoYoukai implements Sobrenatural {
+    private String nome;
+
+    public EspiritoYoukai(String nome) {
+        this.nome = nome;
+    }
+
+    @Override
+    public void manifestar() {
+        System.out.println(nome + " aparece do nada e persegue quem está investigando!");
+    }
+}
+
+
+class MapaDeAvistamentos {
+    // chave: nome do local
+    private HashMap<String, Sobrenatural> avistamentos;
+
+    public MapaDeAvistamentos() {
+        this.avistamentos = new HashMap<>();
+    }
+
+    public void registrar(String local, Sobrenatural ser) {
+        avistamentos.put(local, ser);
+    }
+
+    public void investigar(String local) {
+        System.out.println("--- Investigando: " + local + " ---");
+        Sobrenatural ser = avistamentos.get(local);
+
+        // get devolve null se o local não foi registrado
+        if (ser == null) {
+            System.out.println("O local está tranquilo.");
+        } else {
+            ser.manifestar();
+        }
+    }
+}
