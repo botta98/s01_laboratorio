@@ -1,0 +1,78 @@
+// Exercício 2: Herança, Sobrescrita e ArrayList (O Cardápio do Leblanc)
+
+import java.util.ArrayList;
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("--- Cardápio do Leblanc ---");
+
+        ItemDoCardapio cafe = new ItemDoCardapio("Café coado", 8.0);
+        ItemDoCardapio curry = new ItemDoCardapio("Curry da casa", 22.0);
+        ComboLeblanc combo = new ComboLeblanc("Combo curry + café", 30.0);
+
+        CafeLeblanc leblanc = new CafeLeblanc();
+        leblanc.adicionar(cafe);
+        leblanc.adicionar(curry);
+        leblanc.adicionar(combo);
+
+        leblanc.mostrarCardapio();
+    }
+}
+
+
+class ItemDoCardapio {
+    private String nome;
+    private double preco;
+
+    public ItemDoCardapio(String nome, double preco) {
+        this.nome = nome;
+        this.preco = preco;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    // item comum: preço cadastrado
+    public double precoFinal() {
+        return preco;
+    }
+}
+
+
+// ComboLeblanc herda de ItemDoCardapio
+class ComboLeblanc extends ItemDoCardapio {
+    public ComboLeblanc(String nome, double preco) {
+        super(nome, preco);
+    }
+
+    // combo sai com 10% de desconto
+    @Override
+    public double precoFinal() {
+        return getPreco() * 0.9;
+    }
+}
+
+
+class CafeLeblanc {
+    private ArrayList<ItemDoCardapio> cardapio;
+
+    public CafeLeblanc() {
+        this.cardapio = new ArrayList<>();
+    }
+
+    public void adicionar(ItemDoCardapio item) {
+        cardapio.add(item);
+    }
+
+    public void mostrarCardapio() {
+        // cada item usa o seu precoFinal()
+        for (ItemDoCardapio item : cardapio) {
+            System.out.println(item.getNome() + " - R$ " + item.precoFinal());
+        }
+    }
+}
