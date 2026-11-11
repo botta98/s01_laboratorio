@@ -1,0 +1,41 @@
+-- Exercício 1: data, Guards e if (O Café do Leblanc)
+
+
+-- campos por posição: nome, preço e intensidade
+data Cafe = Cafe String Double Int
+
+
+descrever :: Cafe -> String
+descrever (Cafe nome preco _) = nome ++ " - R$ " ++ show preco
+
+
+-- a primeira condição verdadeira decide
+forca :: Cafe -> String
+forca (Cafe _ _ intensidade)
+  | intensidade >= 8 = "Forte"
+  | intensidade >= 5 = "Equilibrado"
+  | otherwise        = "Suave"
+
+
+-- o leite custa 2.0 a mais
+precoDoPedido :: Bool -> Cafe -> Double
+precoDoPedido comLeite (Cafe _ preco _) =
+  if comLeite
+    then preco + 2.0
+    else preco
+
+
+main :: IO ()
+main = do
+  let mandheling = Cafe "Mandheling" 12.0 9
+  let blend = Cafe "Blend da Casa" 8.0 6
+  let blueMountain = Cafe "Blue Mountain" 15.0 3
+
+  putStrLn "--- Cafés do dia ---"
+  putStrLn (descrever mandheling ++ " | " ++ forca mandheling)
+  putStrLn (descrever blend ++ " | " ++ forca blend)
+  putStrLn (descrever blueMountain ++ " | " ++ forca blueMountain)
+
+  putStrLn "--- Blend da Casa com leite e sem leite ---"
+  print (precoDoPedido True blend)
+  print (precoDoPedido False blend)
