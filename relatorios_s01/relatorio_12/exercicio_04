@@ -1,0 +1,61 @@
+-- Exercício 4: Tipos com Opções e Registros, Revisão Geral (A Casa de Banhos da Yubaba)
+
+
+-- uma Etapa é sempre uma dessas três opções
+data Etapa = NaFila | NoBanho | Concluido
+  deriving (Show, Eq)
+
+
+data Atendimento = Atendimento
+  { cliente :: String
+  , servico :: String
+  , valor   :: Double
+  , etapa   :: Etapa
+  }
+
+
+descrever :: Atendimento -> String
+descrever at =
+  cliente at ++ " - " ++ servico at ++ " - " ++ show (etapa at)
+
+
+-- devolve um atendimento novo; o recebido não muda
+concluir :: Atendimento -> Atendimento
+concluir at = at { etapa = Concluido }
+
+
+-- só os concluídos já foram pagos
+arrecadado :: [Atendimento] -> Double
+arrecadado atendimentos =
+  sum (map valor (filter (\at -> etapa at == Concluido) atendimentos))
+
+
+main :: IO ()
+main = do
+  let espiritoDoRio =
+        Atendimento { cliente = "Espírito do Rio"
+                    , servico = "banho de ervas"
+                    , valor   = 300.0
+                    , etapa   = NoBanho }
+  let semRosto =
+        Atendimento { cliente = "Sem-Rosto"
+                    , servico = "banho quente"
+                    , valor   = 120.0
+                    , etapa   = NaFila }
+  let deusRabanete =
+        Atendimento { cliente = "Deus Rabanete"
+                    , servico = "sauna a vapor"
+                    , valor   = 80.0
+                    , etapa   = NaFila }
+
+  let original = [espiritoDoRio, semRosto, deusRabanete]
+  -- dois dos três passam por concluir
+  let nova = [concluir espiritoDoRio, semRosto, concluir deusRabanete]
+
+  putStrLn "--- Lista original ---"
+  mapM_ putStrLn (map descrever original)
+  putStrLn ("Arrecadado: " ++ show (arrecadado original))
+
+  putStrLn "--- Lista nova ---"
+  mapM_ putStrLn (map descrever nova)
+  putStrLn ("Arrecadado: " ++ show (arrecadado nova))
