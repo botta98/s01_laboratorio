@@ -1,0 +1,58 @@
+-- Exercício 3: Pattern Matching em Listas e Recursão (O Caderno de Esboços)
+
+
+data Esboco = Esboco
+  { titulo  :: String
+  , tecnica :: String
+  , horas   :: Int
+  }
+
+
+-- o primeiro da lista é o mais recente
+esbocoMaisRecente :: [Esboco] -> String
+esbocoMaisRecente []    = "O caderno está vazio."
+esbocoMaisRecente (e:_) = "Mais recente: " ++ titulo e ++ " (" ++ tecnica e ++ ")"
+
+
+-- 1 pelo primeiro + a contagem do resto
+contarEsbocos :: [Esboco] -> Int
+contarEsbocos []        = 0
+contarEsbocos (_:resto) = 1 + contarEsbocos resto
+
+
+-- horas do primeiro + horas do resto
+horasDesenhando :: [Esboco] -> Int
+horasDesenhando []        = 0
+horasDesenhando (e:resto) = horas e + horasDesenhando resto
+
+
+main :: IO ()
+main = do
+  let caderno =
+        [ Esboco { titulo = "Catedral em ruínas", tecnica = "nanquim", horas = 5 }
+        , Esboco { titulo = "Dragão de ossos", tecnica = "grafite", horas = 3 }
+        , Esboco { titulo = "Floresta sombria", tecnica = "carvão", horas = 4 }
+        ]
+
+  putStrLn "--- Caderno ---"
+  putStrLn (esbocoMaisRecente caderno)
+  putStrLn ("Esboços: " ++ show (contarEsbocos caderno))
+  putStrLn ("Horas desenhando: " ++ show (horasDesenhando caderno))
+
+  putStrLn "--- Caderno vazio ---"
+  putStrLn (esbocoMaisRecente [])
+
+  -- o : cria um caderno novo, e o anterior não muda
+  let cadernoNovo = Esboco { titulo = "Lua sobre o pântano", tecnica = "nanquim", horas = 2 } : caderno
+
+  putStrLn "--- Caderno novo ---"
+  putStrLn (esbocoMaisRecente cadernoNovo)
+  putStrLn ("Esboços: " ++ show (contarEsbocos cadernoNovo))
+
+  putStrLn "--- Caderno anterior ---"
+  putStrLn (esbocoMaisRecente caderno)
+  putStrLn ("Esboços: " ++ show (contarEsbocos caderno))
+
+  -- dá erro ao executar, porque o caderno está vazio:
+  -- putStrLn (titulo (head []))
+  -- Prelude.head: empty list
