@@ -1,0 +1,62 @@
+; Exercício 2: Keywords, case e Funções de Alta Ordem (O Scanner de 4546B)
+
+
+; o perigo é sempre :inofensiva, :agressiva ou :leviata
+(defstruct criatura
+  nome
+  bioma
+  profundidade
+  perigo)
+
+
+; lista global, usada como constante
+(defparameter *catalogo*
+  (list
+   (make-criatura :nome "Peeper" :bioma "Zona Segura Rasa"
+                  :profundidade 10 :perigo :inofensiva)
+   (make-criatura :nome "Stalker" :bioma "Floresta de Algas"
+                  :profundidade 50 :perigo :agressiva)
+   (make-criatura :nome "Reaper Leviathan" :bioma "Zona do Acidente"
+                  :profundidade 150 :perigo :leviata)
+   (make-criatura :nome "Crabsquid" :bioma "Zona de Algas Sangrentas"
+                  :profundidade 350 :perigo :agressiva)
+   (make-criatura :nome "Sea Dragon Leviathan" :bioma "Zona de Lava Inativa"
+                  :profundidade 1200 :perigo :leviata)))
+
+
+; otherwise pega qualquer outra keyword
+(defun texto-do-perigo (perigo)
+  (case perigo
+    (:inofensiva "Inofensiva")
+    (:agressiva  "Agressiva")
+    (:leviata    "Leviata: mantenha distancia")
+    (otherwise   "Desconhecido")))
+
+
+(defun descreve-criatura (c)
+  (format nil "~a - ~a - ~a m - ~a"
+          (criatura-nome c)
+          (criatura-bioma c)
+          (criatura-profundidade c)
+          (texto-do-perigo (criatura-perigo c))))
+
+
+; fica só quem vive mais fundo que metros
+(defun abaixo-de (metros catalogo)
+  (remove-if-not (lambda (c) (> (criatura-profundidade c) metros))
+                 catalogo))
+
+
+(defun main ()
+  (let ((fundas (abaixo-de 100 *catalogo*)))
+    (format t "--- Catalogo do Scanner ---~%")
+    (dolist (texto (mapcar #'descreve-criatura *catalogo*))
+      (format t "~a~%" texto))
+
+    (format t "--- Abaixo de 100 m ---~%")
+    (dolist (texto (mapcar #'descreve-criatura fundas))
+      (format t "~a~%" texto))
+    (format t "Criaturas abaixo de 100 m: ~a~%" (length fundas))))
+
+
+(main)
