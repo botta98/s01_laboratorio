@@ -1,0 +1,56 @@
+; Exercício 3: Recursão, reduce e Imutabilidade (As Joias da Alma)
+
+
+(defstruct garota-magica
+  nome
+  escuridao    ; de 0 (joia limpa) a 100
+  bruxas)      ; quantas bruxas ela já derrotou
+
+
+; grupo vazio vale 0; senão, a escuridão da primeira + o total do resto
+(defun escuridao-total (grupo)
+  (if (null grupo)
+      0
+      (+ (garota-magica-escuridao (car grupo))
+         (escuridao-total (cdr grupo)))))
+
+
+(defun total-de-bruxas (grupo)
+  (reduce #'+ (mapcar #'garota-magica-bruxas grupo)))
+
+
+; monta uma garota nova; a original não muda
+(defun purifica (g quantidade)
+  (make-garota-magica
+   :nome      (garota-magica-nome g)
+   :escuridao (if (>= quantidade (garota-magica-escuridao g))
+                  0
+                  (- (garota-magica-escuridao g) quantidade))
+   :bruxas    (garota-magica-bruxas g)))
+
+
+(defun main ()
+  (let* ((mami   (make-garota-magica :nome "Mami" :escuridao 20 :bruxas 30))
+         (sayaka (make-garota-magica :nome "Sayaka" :escuridao 70 :bruxas 5))
+         (kyoko  (make-garota-magica :nome "Kyoko" :escuridao 40 :bruxas 22))
+         (homura (make-garota-magica :nome "Homura" :escuridao 55 :bruxas 15))
+         (grupo  (list mami sayaka kyoko homura))
+         ; a Madoka faz o contrato e entra na frente; o grupo antigo não muda
+         (madoka (make-garota-magica :nome "Madoka" :escuridao 5 :bruxas 0))
+         (grupo-novo   (cons madoka grupo))
+         (sayaka-limpa (purifica sayaka 50)))
+    (format t "--- Grupo ---~%")
+    (format t "Escuridao total: ~a~%" (escuridao-total grupo))
+    (format t "Bruxas derrotadas: ~a~%" (total-de-bruxas grupo))
+
+    (format t "--- Madoka faz o contrato ---~%")
+    (format t "Escuridao do grupo antigo: ~a~%" (escuridao-total grupo))
+    (format t "Escuridao do grupo novo: ~a~%" (escuridao-total grupo-novo))
+
+    (format t "--- Semente da Aflicao ---~%")
+    (format t "Sayaka original: ~a~%" (garota-magica-escuridao sayaka))
+    (format t "Sayaka purificada: ~a~%"
+            (garota-magica-escuridao sayaka-limpa))))
+
+
+(main)
