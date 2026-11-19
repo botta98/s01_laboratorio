@@ -1,0 +1,56 @@
+; Exercício 1: defstruct, cond e if (A Farmácia da Maomao)
+
+
+; cada erva tem nome, preço por grama e toxicidade (de 0 a 10)
+(defstruct erva
+  nome
+  preco-por-grama
+  toxicidade)
+
+
+; a primeira cláusula verdadeira decide; o t é o "senão"
+(defun classifica-erva (erva)
+  (cond ((>= (erva-toxicidade erva) 7) "veneno")
+        ((>= (erva-toxicidade erva) 4) "use com cuidado")
+        (t "segura")))
+
+
+(defun preco-da-dose (erva gramas)
+  (* (erva-preco-por-grama erva) gramas))
+
+
+; format nil devolve o texto, sem imprimir
+(defun descreve-erva (erva)
+  (format nil "~a - R$~,2f por grama - ~a"
+          (erva-nome erva)
+          (erva-preco-por-grama erva)
+          (classifica-erva erva)))
+
+
+; o if vale um dos dois textos
+(defun aviso (erva)
+  (if (>= (erva-toxicidade erva) 7)
+      "Aviso: Maomao vai testar a erva em si mesma antes"
+      "Liberada para o paciente"))
+
+
+(defun main ()
+  ; let* porque o estoque usa as três ervas de cima
+  (let* ((aconito  (make-erva :nome "Aconito" :preco-por-grama 9.5
+                              :toxicidade 9))
+         (efedra   (make-erva :nome "Efedra" :preco-por-grama 4.2
+                              :toxicidade 5))
+         (gengibre (make-erva :nome "Gengibre" :preco-por-grama 0.8
+                              :toxicidade 1))
+         (estoque  (list aconito efedra gengibre)))
+    (format t "--- Estoque da Maomao ---~%")
+    (dolist (e estoque)
+      (format t "~a~%" (descreve-erva e))
+      (format t "  ~a~%" (aviso e)))
+
+    (format t "--- Dose ---~%")
+    (format t "20 gramas de ~a: R$~,2f~%"
+            (erva-nome efedra) (preco-da-dose efedra 20))))
+
+
+(main)
